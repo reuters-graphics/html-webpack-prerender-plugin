@@ -1,0 +1,34 @@
+{
+  "name": "html-webpack-inject-react-plugin",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "mocha"
+  },
+  "peerDependencies": {
+    "html-webpack-plugin": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "@hobbes7878/eslint-config": "^0.0.2",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.8.0",
+    "expect.js": "^0.3.1",
+    "html-webpack-plugin": "^4.0.0-beta.11",
+    "memory-fs": "^0.5.0",
+    "mocha": "^7.0.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "webpack": "^4.41.5"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "eval": "^0.1.4"
+  }
+}

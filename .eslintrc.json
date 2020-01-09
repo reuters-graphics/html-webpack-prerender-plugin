@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "extends": "@hobbes7878/eslint-config",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  }
+}
