@@ -2,7 +2,7 @@ import Component from './Component';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-if (document && document.body) {
+if (document.body) {
   const div = document.getElementById('root');
   if (div.hasChildNodes()) {
     ReactDOM.hydrate(<Component />, div);
@@ -10,7 +10,5 @@ if (document && document.body) {
     ReactDOM.render(<Component />, div);
   }
 }
-
-export const selector = '#root';
 
 export default Component;

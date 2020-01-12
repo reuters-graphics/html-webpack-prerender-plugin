@@ -1,7 +1,11 @@
 const expect = require('expect.js');
+const path = require('path');
 const webpack = require('webpack');
 const MemoryFS = require('memory-fs');
 const webpackConfig = require('./src/config/webpack');
+const cheerio = require('cheerio');
+
+const DIST = path.resolve(__dirname, 'dist');
 
 describe('Test plugin', function() {
   it('Should inject tags', async function() {
@@ -21,6 +25,7 @@ describe('Test plugin', function() {
         console.error(info.errors);
         reject(new Error('Compilation failed.'));
       }
+
       resolve();
 
       // const $ = cheerio.load(stats.compilation.assets['index.html'].source());
@@ -33,5 +38,10 @@ describe('Test plugin', function() {
       // expect($('p').first().text()).to.be('para 1');
       // expect($('p').last().text()).to.be('para 2');
     }));
-  });
+    const html = fs.readFileSync(path.resolve(DIST, 'index.html'), 'utf-8');
+    const $ = cheerio.load(html);
+    expect($('h1').text()).to.be('I\'m a react app');
+
+    expect($('button').text()).to.be('I\'ve been clicked 0 times');
+  }).timeout(30000);
 });

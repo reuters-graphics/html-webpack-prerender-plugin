@@ -13,6 +13,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-react": "^7.7.4",
     "@hobbes7878/eslint-config": "^0.0.2",
@@ -24,7 +25,9 @@
     "mocha": "^7.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "webpack": "^4.41.5"
+    "schema-utils": "^2.6.1",
+    "webpack": "^4.41.5",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "chalk": "^3.0.0",
