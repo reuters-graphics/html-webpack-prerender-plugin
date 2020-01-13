@@ -22,7 +22,7 @@ This app is heavily inspired by [static-site-generator-webpack-plugin](https://g
 
 1. Install
   ```
-  $ yarn add -D html-webpack-ssr-plugin
+  $ yarn add -D html-webpack-ssr-plugin html-webpack-plugin@next
   ```
 
 2. Configure webpack.
