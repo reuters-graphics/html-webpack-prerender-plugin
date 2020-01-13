@@ -10,7 +10,7 @@ TK.
 
 ### Credits
 
-Heavily inspired by [static-site-generator-webpack-plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin), but built with an API to play nicely with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin).
+Heavily inspired by [static-site-generator-webpack-plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin).
 
 ## Quickstart
 
@@ -19,16 +19,16 @@ Heavily inspired by [static-site-generator-webpack-plugin](https://github.com/ma
   $ yarn add -D html-webpack-ssr-plugin
   ```
 
-2. Configure webpack with `umd`.
+2. Configure webpack.
   ```javascript
   // webpack.config.js
   const HtmlWebpackPlugin = require('html-webpack-plugin');
   const HtmlWebpackSsrPlugin = require('html-webpack-ssr-plugin');
 
   module.exports = {
-    entry: 'src/js/index.js',
+    entry: './src/js/index.js',
     output: {
-      path: 'dist',
+      path: './dist',
       filename: '[name].js',
       // This is important, because your app must
       // be executable in both a node and browser
@@ -38,7 +38,7 @@ Heavily inspired by [static-site-generator-webpack-plugin](https://github.com/ma
     // ...
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'src/templates/index.html',
+        template: './src/templates/index.html',
       }),
       new HtmlWebpackSsrPlugin({ main: '#root' }),
     ],
@@ -57,11 +57,34 @@ Heavily inspired by [static-site-generator-webpack-plugin](https://github.com/ma
   </html>
   ```
 
-4. Make sure your app exports a default function that renders a string of markup.
+4. Make sure your app exports a default function that renders a string of your markup.
   ```javascript
   // src/js/index.js
   export default = () => '<p>Hello world!</p>';
   ```
+
+#### Rendered
+
+```html
+<!-- src/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head></head>
+  <body>
+    <div id="root"><p>Hello world!</p></div>
+    <script src="main.js"></script>
+  </body>
+</html>
+```
+
+## More config examples
+
+- [Plugin options](docs/options.md)
+- [Multiple apps](docs/multiple.md)
+- [Static markup](docs/static.md)
+- [React app](docs/react.md)
+- [React/Redux app with preloaded state](docs/redux.md)
+
 
 ## Testing
 
