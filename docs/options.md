@@ -48,7 +48,7 @@ new HtmlWebpackSsrPlugin({
 });
 ```
 
-##### `selector`
+#### `selector`
 
 A CSS selector for the container your app will be rendered into. For example, a template like this...
 
@@ -75,7 +75,7 @@ A CSS selector for the container your app will be rendered into. For example, a 
 </body>
 ```
 
-##### `scope`
+#### `scope`
 
 An object that will be added to the globals when evaluating your app code in a node context. By default scope will be:
 
@@ -91,7 +91,7 @@ if (document.body) {
 }
 ```
 
-##### `props`
+#### `props`
 
 An object passed to your app's default render function. For example, a configuration like this...
 
@@ -113,7 +113,7 @@ export default (props) => `<h1>${props.title}</h1>`;
 <h1>My title</h1>
 ```
 
-##### `injectPropsTo`
+#### `injectPropsTo`
 
 This string will be used to create a global variable in your app that will contain the value of your props, which is useful when hydrating a dynamic app with a preloaded state. For example, this setup...
 
@@ -146,7 +146,7 @@ new HtmlWebpackSsrPlugin({
 });
 ```
 
-##### Entry pointer
+#### Entry pointer
 
 The entry pointer points at a specific entry for the the app the plugin will render and inject into your page.
 
@@ -189,9 +189,9 @@ module.exports = {
 };
 ```
 
-##### Filename pointer
+#### Filename pointer
 
-Tells the plugin what page to inject the app into. This should be the same as `filename` property used in `html-webpack-plugin`. For example...
+Tells the plugin what page to inject the app into. This should be the same as `filename` property used in `html-webpack-plugin`. For example:
 
 ```javascript
 [
