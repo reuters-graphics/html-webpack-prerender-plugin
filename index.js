@@ -7,14 +7,13 @@ const optionsSchema = require('./schema');
 const createElement = require('create-html-element');
 const jsesc = require('jsesc');
 
-// Inspired by...
-// https://github.com/markdalgleish/static-site-generator-webpack-plugin/blob/master/index.js
+const pluginName = 'HtmlWebpackSsrPlugin';
+const errorLabel = `${pluginName} ${chalk.red('ERROR:')}`;
+const warnLabel = `${pluginName} ${chalk.yellow('Warning:')}`;
 
-const pluginLabel = chalk.red('ReactStaticRendererPlugin:');
-
-class ReactStaticRendererPlugin {
+class HtmlWebpackSsrPlugin {
   constructor(options = {}) {
-    validateOptions(optionsSchema, options, 'ReactStaticRendererPlugin');
+    validateOptions(optionsSchema, options, pluginName);
     this.options = this.areShallowOptions(options) ?
       { 'index.html': options } : options;
   }
@@ -67,26 +66,26 @@ class ReactStaticRendererPlugin {
     try {
       app = _eval(source, { window: {}, document: {}, ...scope });
     } catch (e) {
-      throw new Error(`${pluginLabel} Error evaluating component asset.\n${e}`);
+      throw new Error(`${errorLabel} Error evaluating asset source.\n${e}`);
     }
 
     try {
       renderedString = app.default(props);
     } catch (e) {
-      throw new Error(`${pluginLabel} Error rendering component.\n${e}`);
+      throw new Error(`${errorLabel} Error rendering component.\n${e}`);
     }
 
     const $ = cheerio.load(html);
 
     if ($(selector).length < 1) {
-      throw new Error(`${pluginLabel} Can't find element with query selector: '${selector}'.`);
+      throw new Error(`${errorLabel} Can't find element with query selector: '${selector}'.`);
     }
 
     if ($(selector).length > 1) {
-      console.warn(`${pluginLabel} More than one element with query selector: '${selector}'.`);
+      console.warn(`${warnLabel} More than one element with query selector: '${selector}'.`);
     }
 
-    $(selector).html('');
+    $(selector).html(''); // Blow away any markup in container
     $(selector).append(renderedString);
 
     if (injectPropsTo) {
@@ -114,9 +113,9 @@ class ReactStaticRendererPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.compilation.tap('ReactStaticRendererPlugin', (compilation) => {
+    compiler.hooks.compilation.tap(pluginName, (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
-        'ReactStaticRendererPlugin',
+        pluginName,
         (data, cb) => {
           const outputName = data.plugin.childCompilationOutputName;
 
@@ -128,7 +127,11 @@ class ReactStaticRendererPlugin {
 
           Object.keys(entryMap).forEach((entry) => {
             const context = this.getContext(entryMap[entry]);
-            html = this.injectReactApp(entry, context, html, compilation);
+            try {
+              html = this.injectReactApp(entry, context, html, compilation);
+            } catch (e) {
+              cb(e, data);
+            }
           });
 
           data.html = html;
@@ -140,4 +143,4 @@ class ReactStaticRendererPlugin {
   }
 }
 
-module.exports = ReactStaticRendererPlugin;
+module.exports = HtmlWebpackSsrPlugin;
