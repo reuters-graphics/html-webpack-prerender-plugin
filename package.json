@@ -32,8 +32,6 @@
     "react-redux": "^7.1.0",
     "redux": "^4.0.5",
     "schema-utils": "^2.6.1",
-    "svelte": "^3.16.7",
-    "svelte-loader": "^2.13.6",
     "webpack": "^4.41.5",
     "webpack-merge": "^4.2.2"
   },
