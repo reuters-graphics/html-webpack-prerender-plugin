@@ -27,6 +27,10 @@ module.exports = {
                     selector: { type: 'string' },
                     scope: { type: 'object' },
                     props: { type: 'object' },
+                    injectPropsTo: {
+                      type: 'string',
+                      pattern: '^[a-zA-Z_][a-zA-Z0-9_]*$',
+                    },
                   },
                   required: ['selector'],
                 },
@@ -62,6 +66,10 @@ module.exports = {
                 selector: { type: 'string' },
                 scope: { type: 'object' },
                 props: { type: 'object' },
+                injectPropsTo: {
+                  type: 'string',
+                  pattern: '^[a-zA-Z_][a-zA-Z0-9_]*$',
+                },
               },
               required: ['selector'],
             },

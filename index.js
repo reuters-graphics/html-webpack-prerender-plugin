@@ -1,10 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ReactDOMServer = require('react-dom/server');
 const _eval = require('eval');
 const cheerio = require('cheerio');
 const chalk = require('chalk');
 const validateOptions = require('schema-utils');
 const optionsSchema = require('./schema');
+const createElement = require('create-html-element');
+const jsesc = require('jsesc');
 
 // Inspired by...
 // https://github.com/markdalgleish/static-site-generator-webpack-plugin/blob/master/index.js
@@ -42,7 +43,19 @@ class ReactStaticRendererPlugin {
     return compilation.assets[outputFile];
   };
 
-  injectReactApp(entry, selector, scope, html, compilation) {
+  generateScriptForProps(props, injectPropsTo) {
+    return createElement({
+      name: 'script',
+      attributes: {
+        type: 'application/javascript',
+      },
+      html: `window.${injectPropsTo} = ${jsesc(props, { isScriptContext: true })};`,
+    });
+  }
+
+  injectReactApp(entry, context, html, compilation) {
+    const { selector, scope, props, injectPropsTo } = context;
+
     const asset = this.findAsset(entry, compilation);
 
     if (!asset) return html;
@@ -54,13 +67,13 @@ class ReactStaticRendererPlugin {
     try {
       app = _eval(source, { window: {}, document: {}, ...scope });
     } catch (e) {
-      throw new Error(`${pluginLabel} Error evaluating component asset.`);
+      throw new Error(`${pluginLabel} Error evaluating component asset.\n${e}`);
     }
 
     try {
-      renderedString = ReactDOMServer.renderToString(app.default());
+      renderedString = app.default(props);
     } catch (e) {
-      throw new Error(`${pluginLabel} Error rendering component.`);
+      throw new Error(`${pluginLabel} Error rendering component.\n${e}`);
     }
 
     const $ = cheerio.load(html);
@@ -75,17 +88,28 @@ class ReactStaticRendererPlugin {
 
     $(selector).html('');
     $(selector).append(renderedString);
+
+    if (injectPropsTo) {
+      $('body').prepend(this.generateScriptForProps(props, injectPropsTo));
+    }
     return $.html();
   }
 
-  getSelectorAndScope(option) {
+  getContext(option) {
     if (typeof option === 'string') {
       return {
         selector: option,
         scope: {},
+        props: {},
+        injectPropsTo: false,
       };
     } else {
-      return option;
+      return {
+        selector: option.selector,
+        scope: option.scope || {},
+        props: option.props || {},
+        injectPropsTo: option.injectPropsTo || false,
+      };
     }
   }
 
@@ -103,8 +127,8 @@ class ReactStaticRendererPlugin {
           let html = data.html;
 
           Object.keys(entryMap).forEach((entry) => {
-            const { selector, scope } = this.getSelectorAndScope(entryMap[entry]);
-            html = this.injectReactApp(entry, selector, scope, html, compilation);
+            const context = this.getContext(entryMap[entry]);
+            html = this.injectReactApp(entry, context, html, compilation);
           });
 
           data.html = html;
