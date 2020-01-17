@@ -60,6 +60,7 @@ class HtmlWebpackSsrPlugin {
     if (!asset) return html;
 
     const source = asset.source();
+
     let app, rendered, markup, head;
 
     try {

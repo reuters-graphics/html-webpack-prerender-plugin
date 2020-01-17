@@ -1,15 +1,16 @@
+import { hydrate, render } from 'react-dom';
+
 import App from './App';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 
 if (document.body) {
   const div = document.getElementById('root');
   if (div.hasChildNodes()) {
-    ReactDOM.hydrate(<App />, div);
+    hydrate(<App />, div);
   } else {
-    ReactDOM.render(<App />, div);
+    render(<App />, div);
   }
 }
 
-export default (props) => ReactDOMServer.renderToString(<App />);
+export default (props) => renderToString(<App />);

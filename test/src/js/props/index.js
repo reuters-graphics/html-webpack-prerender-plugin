@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 const App = ({ title }) => (
   <h1>{title}</h1>
 );
 
-export default (props) => ReactDOMServer.renderToStaticMarkup(<App {...props} />);
+export default (props) => renderToStaticMarkup(<App {...props} />);

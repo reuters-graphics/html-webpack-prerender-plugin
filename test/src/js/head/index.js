@@ -1,7 +1,7 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { hydrate } from 'react-dom';
 import { renderToString } from 'react-dom/server';
 
 const helmetContext = {};
@@ -18,7 +18,7 @@ const App = () => (
 
 if (document.body) {
   const div = document.getElementById('root');
-  ReactDOM.hydrate(<App />, div);
+  hydrate(<App />, div);
 }
 
 export default () => {

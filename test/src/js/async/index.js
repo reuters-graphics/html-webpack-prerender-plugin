@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
+import { render } from 'react-dom';
+import { renderToString } from 'react-dom/server';
 
 const stall = (stallTime) => new Promise(resolve => setTimeout(resolve, stallTime));
 
@@ -20,10 +20,10 @@ const App = (props) => (
 if (document.body) {
   const div = document.getElementById('root');
   const fruits = ['pear', 'quince'];
-  ReactDOM.render(<App fruits={fruits} />, div);
+  render(<App fruits={fruits} />, div);
 }
 
 export default async(props) => {
   const fruits = await simulateFetch();
-  return ReactDOMServer.renderToString(<App fruits={fruits} />);
+  return renderToString(<App fruits={fruits} />);
 };

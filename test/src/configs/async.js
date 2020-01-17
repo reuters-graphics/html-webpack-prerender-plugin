@@ -7,7 +7,7 @@ const commonConfig = require('./common');
 
 module.exports = merge([
   commonConfig, {
-    mode: 'development',
+    mode: 'production',
     entry: [
       'regenerator-runtime/runtime',
       path.resolve(__dirname, '../js/async/index.js'),

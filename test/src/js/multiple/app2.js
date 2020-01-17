@@ -1,6 +1,7 @@
+import { hydrate, render } from 'react-dom';
+
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 
 const App = () => (
   <h2>Second app</h2>
@@ -9,10 +10,10 @@ const App = () => (
 if (document.body) {
   const div = document.getElementById('root-2');
   if (div.hasChildNodes()) {
-    ReactDOM.hydrate(<App />, div);
+    hydrate(<App />, div);
   } else {
-    ReactDOM.render(<App />, div);
+    render(<App />, div);
   }
 }
 
-export default (props) => ReactDOMServer.renderToString(<App />);
+export default (props) => renderToString(<App />);

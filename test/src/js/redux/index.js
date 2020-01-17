@@ -1,22 +1,23 @@
+import { hydrate, render } from 'react-dom';
+
 import App from './App';
 import { Provider } from 'react-redux';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactDOMServer from 'react-dom/server';
 import { createStore } from 'redux';
 import reducer from './reducer';
+import { renderToString } from 'react-dom/server';
 
 if (document.body) {
   const store = createStore(reducer, window.__PRELOADED_STATE__);
 
   const div = document.getElementById('root');
   if (div.hasChildNodes()) {
-    ReactDOM.hydrate(
+    hydrate(
       <Provider store={store}>
         <App />
       </Provider>, div);
   } else {
-    ReactDOM.render(
+    render(
       <Provider store={store}>
         <App />
       </Provider>, div);
@@ -25,7 +26,7 @@ if (document.body) {
 
 export default (props) => {
   const store = createStore(reducer, props);
-  return ReactDOMServer.renderToString(
+  return renderToString(
     <Provider store={store}>
       <App />
     </Provider>

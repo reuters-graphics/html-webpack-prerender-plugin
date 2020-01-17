@@ -75,6 +75,8 @@ A CSS selector for the container your app will be rendered into. For example, a 
 </body>
 ```
 
+**Keep in mind** the plugin will remove any children from this container your selector grabs before injecting your rendered markup, so generally it's a bad idea to use the `body` tag. Instead, supply a template to html-webpack-plugin that includes a custom root container node for your app.
+
 #### `scope`
 
 An object that will be added to the globals when evaluating your app code in a node context. By default scope will be:
@@ -90,6 +92,25 @@ if (document.body) {
   // do something just in the browser...
 }
 ```
+You can also use it to add any necessary context to make your script work in both a browser and node context:
+
+```javascript
+const requestAnimationFrame = require('raf');
+
+module.exports = {
+  // ...
+  plugins: [
+    // ...
+    new HtmlWebpackSsrPlugin({
+      main: {
+        selector: '#root',
+        scope: { requestAnimationFrame },
+      },
+    }),
+  ]
+};
+```
+
 
 #### `props`
 
