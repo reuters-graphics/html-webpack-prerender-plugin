@@ -15,4 +15,4 @@ if (document.body) {
   }
 }
 
-export default () => ReactDOMServer.renderToString(<App />);
+export default (props) => ReactDOMServer.renderToString(<App />);

@@ -92,6 +92,8 @@ This app is heavily inspired by [static-site-generator-webpack-plugin](https://g
 - [Static markup](docs/static.md)
 - [React app](docs/react.md)
 - [React/Redux app with preloaded state](docs/redux.md)
+- [Usage with react-helmet-async](docs/helmet.md)
+- [Async rendering](docs/async.md)
 
 
 ## Testing

@@ -1,1 +1,1 @@
-export default () => '<p>Hello world!</p>';
+export default (props) => '<p>Hello world!</p>';

@@ -20,7 +20,7 @@ class HtmlWebpackSsrPlugin {
 
   areShallowOptions(options) {
     const testKey = Object.keys(options)[0];
-    return typeof options[testKey] === 'string';
+    return typeof options[testKey] === 'string' || options[testKey].selector;
   }
 
   findAsset(entry, compilation) {
@@ -52,7 +52,7 @@ class HtmlWebpackSsrPlugin {
     });
   }
 
-  injectReactApp(entry, context, html, compilation) {
+  async injectReactApp(entry, context, html, compilation) {
     const { selector, scope, props, injectPropsTo } = context;
 
     const asset = this.findAsset(entry, compilation);
@@ -60,19 +60,25 @@ class HtmlWebpackSsrPlugin {
     if (!asset) return html;
 
     const source = asset.source();
-    let app;
-    let renderedString;
+    let app, rendered, markup, head;
 
     try {
-      app = _eval(source, { window: {}, document: {}, ...scope });
+      app = _eval(source, { window: {}, document: {}, ...scope }, true);
     } catch (e) {
       throw new Error(`${errorLabel} Error evaluating asset source.\n${e}`);
     }
 
     try {
-      renderedString = app.default(props);
+      rendered = await app.default(props);
     } catch (e) {
       throw new Error(`${errorLabel} Error rendering component.\n${e}`);
+    }
+
+    if (Array.isArray(rendered)) {
+      markup = rendered[0];
+      head = rendered[1];
+    } else {
+      markup = rendered;
     }
 
     const $ = cheerio.load(html);
@@ -86,7 +92,9 @@ class HtmlWebpackSsrPlugin {
     }
 
     $(selector).html(''); // Blow away any markup in container
-    $(selector).append(renderedString);
+    $(selector).append(markup);
+
+    if (head) $(selector).append(head);
 
     if (injectPropsTo) {
       $('body').prepend(this.generateScriptForProps(props, injectPropsTo));
@@ -116,7 +124,7 @@ class HtmlWebpackSsrPlugin {
     compiler.hooks.compilation.tap(pluginName, (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         pluginName,
-        (data, cb) => {
+        async(data, cb) => {
           const outputName = data.plugin.childCompilationOutputName;
 
           if (!(outputName in this.options)) cb(null, data);
@@ -124,15 +132,15 @@ class HtmlWebpackSsrPlugin {
           const entryMap = this.options[outputName];
 
           let html = data.html;
-
-          Object.keys(entryMap).forEach((entry) => {
+          for (const entry in entryMap) {
             const context = this.getContext(entryMap[entry]);
+
             try {
-              html = this.injectReactApp(entry, context, html, compilation);
+              html = await this.injectReactApp(entry, context, html, compilation);
             } catch (e) {
               cb(e, data);
             }
-          });
+          };
 
           data.html = html;
 
