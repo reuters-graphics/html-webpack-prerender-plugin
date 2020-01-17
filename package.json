@@ -46,6 +46,7 @@
     "cheerio": "^1.0.0-rc.3",
     "create-html-element": "^3.0.0",
     "eval": "^0.1.4",
+    "jsdom": "^16.0.0",
     "jsesc": "^2.5.2"
   }
 }

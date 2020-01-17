@@ -79,19 +79,15 @@ A CSS selector for the container your app will be rendered into. For example, a 
 
 #### `scope`
 
-An object that will be added to the globals when evaluating your app code in a node context. By default scope will be:
+An object that will be added to the globals when evaluating your app code in a node context. By default scope will include [jsdom](https://github.com/jsdom/jsdom) `window` and `document` instances:
 
 ```javascript
-{ window: {}, document: {} }
+const { window } = new JSDOM(templateHTML);
+const { document } = window;
+
+const scope = { window, document };
 ```
 
-You can use these values to determine whether you're in a node context or a browser. For example, you can do stuff like this ...
-
-```javascript
-if (document.body) {
-  // do something just in the browser...
-}
-```
 You can also use it to add any necessary context to make your script work in both a browser and node context:
 
 ```javascript

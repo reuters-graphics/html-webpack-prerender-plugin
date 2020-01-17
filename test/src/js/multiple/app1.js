@@ -7,13 +7,11 @@ const App = () => (
   <h1>First app</h1>
 );
 
-if (document.body) {
-  const div = document.getElementById('root-1');
-  if (div.hasChildNodes()) {
-    hydrate(<App />, div);
-  } else {
-    render(<App />, div);
-  }
+const div = document.getElementById('root-1');
+if (div.hasChildNodes()) {
+  hydrate(<App />, div);
+} else {
+  render(<App />, div);
 }
 
 export default (props) => renderToString(<App />);

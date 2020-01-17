@@ -6,6 +6,7 @@ const validateOptions = require('schema-utils');
 const optionsSchema = require('./schema');
 const createElement = require('create-html-element');
 const jsesc = require('jsesc');
+const { JSDOM } = require('jsdom');
 
 const pluginName = 'HtmlWebpackSsrPlugin';
 const errorLabel = `${pluginName} ${chalk.red('ERROR:')}`;
@@ -63,8 +64,12 @@ class HtmlWebpackSsrPlugin {
 
     let app, rendered, markup, head;
 
+    const dom = new JSDOM(html, { pretendToBeVisual: true });
+    const { window } = dom;
+    const { document } = window;
+
     try {
-      app = _eval(source, { window: {}, document: {}, ...scope }, true);
+      app = _eval(source, { window, document, ...scope }, true);
     } catch (e) {
       throw new Error(`${errorLabel} Error evaluating asset source.\n${e}`);
     }

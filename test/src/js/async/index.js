@@ -17,11 +17,9 @@ const App = (props) => (
   </ul>
 );
 
-if (document.body) {
-  const div = document.getElementById('root');
-  const fruits = ['pear', 'quince'];
-  render(<App fruits={fruits} />, div);
-}
+const div = document.getElementById('root');
+const fruits = ['pear', 'quince'];
+render(<App fruits={fruits} />, div);
 
 export default async(props) => {
   const fruits = await simulateFetch();

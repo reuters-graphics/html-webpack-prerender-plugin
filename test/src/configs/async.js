@@ -16,11 +16,6 @@ module.exports = merge([
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'templates/index.html'),
       }),
-      new Plugin({
-        main: {
-          selector: '#root',
-          scope: { setTimeout },
-        },
-      }),
+      new Plugin({ main: '#root' }),
     ],
   }]);
