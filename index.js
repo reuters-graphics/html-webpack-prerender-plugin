@@ -94,7 +94,7 @@ class HtmlWebpackSsrPlugin {
     $(selector).html(''); // Blow away any markup in container
     $(selector).append(markup);
 
-    if (head) $(selector).append(head);
+    if (head) $('head').append(head);
 
     if (injectPropsTo) {
       $('body').prepend(this.generateScriptForProps(props, injectPropsTo));
