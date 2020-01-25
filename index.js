@@ -1,12 +1,12 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const _eval = require('eval');
-const cheerio = require('cheerio');
-const chalk = require('chalk');
-const validateOptions = require('schema-utils');
-const optionsSchema = require('./schema');
-const createElement = require('create-html-element');
-const jsesc = require('jsesc');
-const { JSDOM } = require('jsdom');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { JSDOM } from 'jsdom';
+import _eval from 'eval';
+import chalk from 'chalk';
+import cheerio from 'cheerio';
+import createElement from 'create-html-element';
+import jsesc from 'jsesc';
+import optionsSchema from './schema';
+import validateOptions from 'schema-utils';
 
 const pluginName = 'HtmlWebpackSsrPlugin';
 const errorLabel = `${pluginName} ${chalk.red('ERROR:')}`;

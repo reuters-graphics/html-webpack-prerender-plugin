@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Plugin = require('../../..');
+const Plugin = require('../../../dist/index.js');
 
 const merge = require('webpack-merge');
 const commonConfig = require('./common');

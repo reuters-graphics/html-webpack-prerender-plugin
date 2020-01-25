@@ -102,5 +102,5 @@ Check out some example configurations:
 ## Testing
 
 ```
-$ yarn test
+$ yarn build && yarn test
 ```

@@ -1,10 +1,12 @@
 {
   "name": "html-webpack-ssr-plugin",
   "version": "0.0.7",
-  "main": "index.js",
+  "source": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "private": false,
   "scripts": {
+    "build": "microbundle -f cjs --target node",
     "test": "mocha"
   },
   "author": "Jon McClure <jon.r.mcclure@gmail.com>",
@@ -27,6 +29,7 @@
     "html-webpack-plugin": "^4.0.0-beta.11",
     "lodash": "^4.17.15",
     "memory-fs": "^0.5.0",
+    "microbundle": "^0.11.0",
     "mocha": "^7.0.0",
     "portfinder": "^1.0.25",
     "puppeteer": "^2.0.0",
@@ -37,7 +40,6 @@
     "react-redux": "^7.1.0",
     "redux": "^4.0.5",
     "regenerator-runtime": "^0.13.3",
-    "schema-utils": "^2.6.1",
     "webpack": "^4.41.5",
     "webpack-merge": "^4.2.2"
   },
@@ -47,6 +49,7 @@
     "create-html-element": "^3.0.0",
     "eval": "^0.1.4",
     "jsdom": "^16.0.0",
-    "jsesc": "^2.5.2"
+    "jsesc": "^2.5.2",
+    "schema-utils": "^2.6.1"
   }
 }
