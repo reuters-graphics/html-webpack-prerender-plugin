@@ -4,6 +4,10 @@
   "version": "0.0.9",
   "source": "index.js",
   "main": "dist/index.js",
+  "files": [
+    "dist/*",
+    "docs/*"
+  ],
   "license": "MIT",
   "private": false,
   "scripts": {
