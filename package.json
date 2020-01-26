@@ -11,6 +11,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "microbundle -f cjs --target node",
     "test": "mocha"
   },
