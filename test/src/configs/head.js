@@ -4,7 +4,6 @@ const Plugin = require('../../../dist/index.js');
 
 const merge = require('webpack-merge');
 const commonConfig = require('./common');
-const requestAnimationFrame = require('raf');
 
 module.exports = merge([
   commonConfig, {
@@ -16,11 +15,6 @@ module.exports = merge([
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'templates/index.html'),
       }),
-      new Plugin({
-        main: {
-          selector: '#root',
-          scope: { requestAnimationFrame },
-        },
-      }),
+      new Plugin({ main: '#root' }),
     ],
   }]);

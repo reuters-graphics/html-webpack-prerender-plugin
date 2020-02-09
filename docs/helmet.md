@@ -6,9 +6,6 @@
 `webpack.config.js`
 
 ```javascript
-// Add this polyfill to scope so react-helmet-async has access
-// to global requestAnimationFrame
-const requestAnimationFrame = require('raf');
 
 module.exports = {
   entry: [
@@ -31,12 +28,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './templates/index.html',
     }),
-    new Plugin({
-      main: {
-        selector: '#root',
-        scope: { requestAnimationFrame },
-      },
-    }),
+    new Plugin({ main: '#root' }),
   ],
 };
 ```

@@ -53,7 +53,7 @@ class HtmlWebpackSsrPlugin {
     });
   }
 
-  async injectReactApp(entry, context, html, compilation) {
+  async injectApp(entry, context, html, compilation) {
     const { selector, scope, props, injectPropsTo } = context;
 
     const asset = this.findAsset(entry, compilation);
@@ -67,11 +67,19 @@ class HtmlWebpackSsrPlugin {
     const dom = new JSDOM(html, { pretendToBeVisual: true });
     const { window } = dom;
     const { document } = window;
+    const requestAnimationFrame = (callback) => setTimeout(callback, 0);
+    const cancelAnimationFrame = (id) => clearTimeout(id);
 
     try {
-      app = _eval(source, { window, document, ...scope }, true);
+      app = _eval(source, {
+        window,
+        document,
+        requestAnimationFrame,
+        cancelAnimationFrame,
+        ...scope,
+      }, true);
     } catch (e) {
-      throw new Error(`${errorLabel} Error evaluating asset source.\n${e}`);
+      throw new Error(`${errorLabel} Error evaluating your script source.\n${e}`);
     }
 
     try {
@@ -142,7 +150,7 @@ class HtmlWebpackSsrPlugin {
             const context = this.getContext(entryMap[entry]);
 
             try {
-              html = await this.injectReactApp(entry, context, html, compilation);
+              html = await this.injectApp(entry, context, html, compilation);
             } catch (e) {
               cb(e, data);
             }
