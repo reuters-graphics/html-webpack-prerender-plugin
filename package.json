@@ -10,6 +10,18 @@
   ],
   "license": "MIT",
   "private": false,
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "keywords": [
+    "prerendering",
+    "pre-render",
+    "html-webpack-plugin",
+    "webpack",
+    "ssr",
+    "server-side rendering",
+    "seo"
+  ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "microbundle -f cjs --target node",
