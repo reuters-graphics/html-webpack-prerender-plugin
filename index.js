@@ -4,15 +4,16 @@ import _eval from 'eval';
 import chalk from 'chalk';
 import cheerio from 'cheerio';
 import createElement from 'create-html-element';
+import fetch from 'node-fetch';
 import jsesc from 'jsesc';
 import optionsSchema from './schema';
 import validateOptions from 'schema-utils';
 
-const pluginName = 'HtmlWebpackSsrPlugin';
+const pluginName = 'HtmlWebpackPrerenderPlugin';
 const errorLabel = `${pluginName} ${chalk.red('ERROR:')}`;
 const warnLabel = `${pluginName} ${chalk.yellow('Warning:')}`;
 
-class HtmlWebpackSsrPlugin {
+class HtmlWebpackPrerenderPlugin {
   constructor(options = {}) {
     validateOptions(optionsSchema, options, pluginName);
     this.options = this.areShallowOptions(options) ?
@@ -69,17 +70,21 @@ class HtmlWebpackSsrPlugin {
     const { document } = window;
     const requestAnimationFrame = (callback) => setTimeout(callback, 0);
     const cancelAnimationFrame = (id) => clearTimeout(id);
+    window.requestAnimationFrame = requestAnimationFrame;
+    window.cancelAnimationFrame = cancelAnimationFrame;
+    window.fetch = fetch;
 
     try {
       app = _eval(source, {
         window,
         document,
+        fetch,
         requestAnimationFrame,
         cancelAnimationFrame,
         ...scope,
       }, true);
     } catch (e) {
-      throw new Error(`${errorLabel} Error evaluating your script source.\n${e}`);
+      throw new Error(`${errorLabel} Error evaluating your app script.\n${e}`);
     }
 
     try {
@@ -165,4 +170,4 @@ class HtmlWebpackSsrPlugin {
   }
 }
 
-module.exports = HtmlWebpackSsrPlugin;
+export default HtmlWebpackPrerenderPlugin;

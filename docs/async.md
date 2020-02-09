@@ -8,7 +8,7 @@
 ```javascript
 module.exports = {
   entry: [
-    'regenerator-runtime/runtime',
+    'regenerator-runtime/runtime', // Async support!
     './js/app.js',
   ],
   mode: 'production',

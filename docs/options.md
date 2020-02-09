@@ -4,14 +4,14 @@
 
 ### Configuration shorthands
 
-html-webpack-ssr-plugin allows for several configuration shorthands. We'll explain the component parts of each, but these are all equivalent configurations:
+html-webpack-prerender-plugin allows for several configuration shorthands. We'll explain the component parts of each, but these are all equivalent configurations:
 
 ```javascript
-new HtmlWebpackSsrPlugin({ main: '#root' });
+new HtmlWebpackPrerenderPlugin({ main: '#root' });
 ```
 
 ```javascript
-new HtmlWebpackSsrPlugin({
+new HtmlWebpackPrerenderPlugin({
   'index.html': {
     main: '#root',
   },
@@ -19,7 +19,7 @@ new HtmlWebpackSsrPlugin({
 ```
 
 ```javascript
-new HtmlWebpackSsrPlugin({
+new HtmlWebpackPrerenderPlugin({
   'index.html': {
     main: {
       selector: '#root',
@@ -36,7 +36,7 @@ new HtmlWebpackSsrPlugin({
 Let's breakdown the parts of the innermost configuration object, the rendering context object.
 
 ```javascript
-new HtmlWebpackSsrPlugin({
+new HtmlWebpackPrerenderPlugin({
   'index.html': {
     main: { // 👇 Rendering context object
       selector: '#root',
@@ -97,7 +97,7 @@ module.exports = {
   // ...
   plugins: [
     // ...
-    new HtmlWebpackSsrPlugin({
+    new HtmlWebpackPrerenderPlugin({
       main: {
         selector: '#root',
         scope: { requestAnimationFrame },
@@ -154,7 +154,7 @@ window.__PRELOADED_STATE__ = { title: 'My title'};
 Outside the rendering context, pointer properties tell the plugin what and where to inject your app.
 
 ```javascript
-new HtmlWebpackSsrPlugin({
+new HtmlWebpackPrerenderPlugin({
   // 👇 Filename pointer
   'index.html': {
     // 👇 Entry pointer
@@ -175,7 +175,7 @@ module.exports = {
   // ...
   plugins: [
     // ...
-    new HtmlWebpackSsrPlugin({
+    new HtmlWebpackPrerenderPlugin({
       'index.html': {
         // 👇 Default entry name
         main: '#root',
@@ -196,7 +196,7 @@ module.exports = {
   // ...
   plugins: [
     // ...
-    new HtmlWebpackSsrPlugin({
+    new HtmlWebpackPrerenderPlugin({
       'index.html': {
         // 👇 Entry chunk name
         app: '#root',
@@ -216,7 +216,7 @@ Tells the plugin what page to inject the app into. This should be the same as `f
     filename: 'cutom-page-name.html',
     template: './templates/index.html',
   }),
-  new HtmlWebpackSsrPlugin({
+  new HtmlWebpackPrerenderPlugin({
     'custom-page-name.html': { main: '#root' }
   }),
 ]
@@ -229,7 +229,7 @@ And like in `html-webpack-plugin`, you can omit the filename pointer and it will
   new HtmlWebpackPlugin({
     template: './templates/index.html',
   }),
-  new HtmlWebpackSsrPlugin({ main: '#root' }),
+  new HtmlWebpackPrerenderPlugin({ main: '#root' }),
 ]
 ```
 
@@ -245,7 +245,7 @@ You can also use this property to skip pages in your compilation.
     filename: 'page.html',
     template: './templates/index.html',
   }),
-  new HtmlWebpackSsrPlugin({
+  new HtmlWebpackPrerenderPlugin({
     'page.html': { main: '#root' }
   }),
 ]
@@ -274,7 +274,7 @@ module.exports = {
       template: './templates/about.html',
       excludeChunks: ['pageApp'],
     }),
-    new HtmlWebpackSsrPlugin({
+    new HtmlWebpackPrerenderPlugin({
       'about.html': {
         aboutApp: '#app-root',
         pageHeader: {
