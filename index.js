@@ -1,28 +1,29 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { JSDOM } from 'jsdom';
-import _eval from 'eval';
-import chalk from 'chalk';
-import cheerio from 'cheerio';
-import createElement from 'create-html-element';
-import fetch from 'node-fetch';
-import jsesc from 'jsesc';
-import optionsSchema from './schema';
-import validateOptions from 'schema-utils';
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { JSDOM } from "jsdom";
+import _eval from "eval";
+import chalk from "chalk";
+import cheerio from "cheerio";
+import createElement from "create-html-element";
+import fetch from "node-fetch";
+import jsesc from "jsesc";
+import optionsSchema from "./schema";
+import validateOptions from "schema-utils";
 
-const pluginName = 'HtmlWebpackPrerenderPlugin';
-const errorLabel = `${pluginName} ${chalk.red('ERROR:')}`;
-const warnLabel = `${pluginName} ${chalk.yellow('Warning:')}`;
+const pluginName = "HtmlWebpackPrerenderPlugin";
+const errorLabel = `${pluginName} ${chalk.red("ERROR:")}`;
+const warnLabel = `${pluginName} ${chalk.yellow("Warning:")}`;
 
 class HtmlWebpackPrerenderPlugin {
   constructor(options = {}) {
     validateOptions(optionsSchema, options, pluginName);
-    this.options = this.areShallowOptions(options) ?
-      { 'index.html': options } : options;
+    this.options = this.areShallowOptions(options)
+      ? { "index.html": options }
+      : options;
   }
 
   areShallowOptions(options) {
     const testKey = Object.keys(options)[0];
-    return typeof options[testKey] === 'string' || options[testKey].selector;
+    return typeof options[testKey] === "string" || options[testKey].selector;
   }
 
   findAsset(entry, compilation) {
@@ -35,22 +36,24 @@ class HtmlWebpackPrerenderPlugin {
 
     // Webpack outputs an array for each chunk when using sourcemaps
     if (outputFile instanceof Array) {
-    // Is the main bundle always the first element?
-      outputFile = outputFile.find(function(filename) {
+      // Is the main bundle always the first element?
+      outputFile = outputFile.find(function (filename) {
         return /\.js$/.test(filename);
       });
     }
     if (!/\.js$/.test(outputFile)) return null;
     return compilation.assets[outputFile];
-  };
+  }
 
   generateScriptForProps(props, injectPropsTo) {
     return createElement({
-      name: 'script',
+      name: "script",
       attributes: {
-        type: 'application/javascript',
+        type: "application/javascript",
       },
-      html: `window.${injectPropsTo} = ${jsesc(props, { isScriptContext: true })};`,
+      html: `window.${injectPropsTo} = ${jsesc(props, {
+        isScriptContext: true,
+      })};`,
     });
   }
 
@@ -75,14 +78,18 @@ class HtmlWebpackPrerenderPlugin {
     window.fetch = fetch;
 
     try {
-      app = _eval(source, {
-        window,
-        document,
-        fetch,
-        requestAnimationFrame,
-        cancelAnimationFrame,
-        ...scope,
-      }, true);
+      app = _eval(
+        source,
+        {
+          window,
+          document,
+          fetch,
+          requestAnimationFrame,
+          cancelAnimationFrame,
+          ...scope,
+        },
+        true
+      );
     } catch (e) {
       throw new Error(`${errorLabel} Error evaluating your app script.\n${e}`);
     }
@@ -103,26 +110,30 @@ class HtmlWebpackPrerenderPlugin {
     const $ = cheerio.load(html);
 
     if ($(selector).length < 1) {
-      throw new Error(`${errorLabel} Can't find element with query selector: '${selector}'.`);
+      throw new Error(
+        `${errorLabel} Can't find element with query selector: '${selector}'.`
+      );
     }
 
     if ($(selector).length > 1) {
-      console.warn(`${warnLabel} More than one element with query selector: '${selector}'.`);
+      console.warn(
+        `${warnLabel} More than one element with query selector: '${selector}'.`
+      );
     }
 
-    $(selector).html(''); // Blow away any markup in container
+    $(selector).html(""); // Blow away any markup in container
     $(selector).append(markup);
 
-    if (head) $('head').append(head);
+    if (head) $("head").append(head);
 
     if (injectPropsTo) {
-      $('body').prepend(this.generateScriptForProps(props, injectPropsTo));
+      $("body").prepend(this.generateScriptForProps(props, injectPropsTo));
     }
     return $.html();
   }
 
   getContext(option) {
-    if (typeof option === 'string') {
+    if (typeof option === "string") {
       return {
         selector: option,
         scope: {},
@@ -143,8 +154,9 @@ class HtmlWebpackPrerenderPlugin {
     compiler.hooks.compilation.tap(pluginName, (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         pluginName,
-        async(data, cb) => {
-          const outputName = data.plugin.childCompilationOutputName;
+        async (data, cb) => {
+          const outputName =
+            data.outputName || data.plugin.childCompilationOutputName;
 
           if (!(outputName in this.options)) cb(null, data);
 
@@ -159,7 +171,7 @@ class HtmlWebpackPrerenderPlugin {
             } catch (e) {
               cb(e, data);
             }
-          };
+          }
 
           data.html = html;
 
