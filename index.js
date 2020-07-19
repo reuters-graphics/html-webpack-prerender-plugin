@@ -144,7 +144,7 @@ class HtmlWebpackPrerenderPlugin {
       HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
         pluginName,
         async(data, cb) => {
-          const outputName = data.plugin.childCompilationOutputName;
+          const outputName = data.outputName || data.plugin.childCompilationOutputName;
 
           if (!(outputName in this.options)) cb(null, data);
 
