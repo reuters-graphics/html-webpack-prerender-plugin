@@ -67,7 +67,7 @@
     "eval": "^0.1.4",
     "jsdom": "^16.0.0",
     "jsesc": "^2.5.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "schema-utils": "^2.6.1"
   }
 }
